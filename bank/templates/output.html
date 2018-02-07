@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Balance</title>
+</head>
+<body> 
+   <h1>Balances</h1>
+   Argent disponible: {{available_money}} €
+    <table style="border: solid 2px">
+        <thead>
+            <tr style="border: solid 2px">
+                {% for col in columns %}
+                    <th style="border-left: solid 1px">{{col}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+         {% for v in values %}
+            <tr>
+                <td style="border-bottom: solid 1px; border-right: solid 2px">{{v.month}}</td>
+                 {% for balance in v.balances %}
+                    <td style="border-bottom: solid 1px">{{balance}}</td>
+                 {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
