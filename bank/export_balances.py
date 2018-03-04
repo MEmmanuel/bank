@@ -1,4 +1,5 @@
 import datetime as dt
+import webbrowser
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -43,3 +44,4 @@ def export_balances():
             'values': month_balances,
             'available_money': available_money
         }))
+    webbrowser.open(settings.OUTPUT_FILE_PATH)
