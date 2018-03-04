@@ -9,7 +9,7 @@ from bank.tools import *
 from bank.models import Account, Transaction
 
 
-def process_new_files():
+def process_new_files(category_matching):
     for path in os.listdir(settings.INPUT_FILES_DIR):
         print(okblue('BEGIN integration of: {f}'.format(f=path)))
         account = None
@@ -27,11 +27,18 @@ def process_new_files():
                 elif i >= 8 and account is not None:
                     date, label, value, francs_value = row
                     date = dt.datetime.strptime(date, '%d/%m/%Y')
+                    label = label.replace('\n', ' ')
                     value = float(value.replace(',', '.'))
                     try:
                         Transaction.objects.get(account=account, date=date, label=label, value=value)
                     except ObjectDoesNotExist:
-                        transaction = Transaction.objects.create(account=account, date=date, label=label, value=value)
+                        category = None
+                        for m, c in category_matching:
+                            if m in label:
+                                category = c
+                                break
+                        transaction = Transaction.objects.create(account=account, date=date, label=label,
+                                                                 value=value, category=category)
                         print('Add to {account} ; {transaction}'
                               .format(account=transaction.account, transaction=transaction))
 
